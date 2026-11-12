@@ -61,11 +61,11 @@ class TestStockSetup(IntegrationTestCase):
 		run_stock_setup()
 		self.assertEqual(frappe.db.count("Custom DocPerm", {"parent": "Stock Reconciliation"}), before)
 
-		manager = frappe.db.get_value(
-			"Custom DocPerm",
-			{"parent": "Stock Reconciliation", "role": "Stock Manager", "permlevel": 0},
-			["submit", "create"],
-			as_dict=True,
+		# the permission Frappe applies: our own row if there is one, else ERPNext's standard one
+		manager = next(
+			p
+			for p in frappe.get_meta("Stock Reconciliation").permissions
+			if p.role == "Stock Manager" and p.permlevel == 0
 		)
 		self.assertEqual((manager.submit, manager.create), (1, 1))
 

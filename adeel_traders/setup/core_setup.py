@@ -16,7 +16,6 @@ from adeel_traders.setup import data
 def run_setup(company: str | None = None) -> None:
 	"""Create Phase 1 masters and settings. Company-specific parts run only when a company exists."""
 	ensure_uoms()
-	ensure_default_unit_sizes_once()
 	disable_sample_uoms_once()
 	ensure_item_groups()
 	ensure_sales_channels()
@@ -42,6 +41,8 @@ def run_setup(company: str | None = None) -> None:
 	ensure_default_warehouse(company)
 	disable_unused_warehouses(company)
 	apply_settings_once()
+	# after the settings: sizes are counted in the default unit (Piece), which apply_settings_once sets
+	ensure_default_unit_sizes_once()
 
 
 def _single_company() -> str | None:
@@ -232,17 +233,28 @@ def ensure_accounting_dimension() -> None:
 	No company default is set on purpose: a default would also tag expenses (rent, salaries)
 	with a channel and distort profit by channel. Sales documents get their channel from
 	dedicated logic in the sales phase (ADR-010).
+
+	ERPNext adds the dimension's field to every accounting document in a BACKGROUND job. If no
+	worker is running (a first install, CI) that job never runs and every stock entry then fails
+	with "Unknown column". So the same ERPNext function is run right here; it skips what exists.
 	"""
-	if frappe.db.exists("Accounting Dimension", {"document_type": data.ACCOUNTING_DIMENSION}):
-		return
-	# ERPNext adds the dimension field to all accounting doctypes in a background job.
-	frappe.get_doc(
-		{
-			"doctype": "Accounting Dimension",
-			"label": data.ACCOUNTING_DIMENSION,
-			"document_type": data.ACCOUNTING_DIMENSION,
-		}
-	).insert()
+	from erpnext.accounts.doctype.accounting_dimension.accounting_dimension import (
+		make_dimension_in_accounting_doctypes,
+	)
+
+	name = frappe.db.exists("Accounting Dimension", {"document_type": data.ACCOUNTING_DIMENSION})
+	if name:
+		dimension = frappe.get_doc("Accounting Dimension", name)
+	else:
+		dimension = frappe.get_doc(
+			{
+				"doctype": "Accounting Dimension",
+				"label": data.ACCOUNTING_DIMENSION,
+				"document_type": data.ACCOUNTING_DIMENSION,
+			}
+		).insert()
+	if not all(frappe.db.has_column(t, dimension.fieldname) for t in ("GL Entry", "Budget")):
+		make_dimension_in_accounting_doctypes(doc=dimension)
 
 
 def ensure_price_lists(company: str) -> None:

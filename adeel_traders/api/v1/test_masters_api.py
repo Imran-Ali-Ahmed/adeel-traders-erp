@@ -38,7 +38,13 @@ class TestMastersAPI(IntegrationTestCase):
 		names = {i["name"] for i in out["items"]}
 		self.assertIn("Piece", names)
 		self.assertNotIn("Ampere", names)  # ERPNext sample, switched off
-		piece = next(i for i in out["items"] if i["name"] == "Piece")
+		frappe.set_user("Administrator")
+		frappe.get_doc(
+			{"doctype": "Item", "item_code": "_Test AT Unit Use", "item_group": "Lips", "stock_uom": "Piece"}
+		).insert()
+		self.addCleanup(frappe.delete_doc, "Item", "_Test AT Unit Use", force=1)
+		frappe.set_user(self.owner)
+		piece = next(i for i in masters.list_masters("units")["items"] if i["name"] == "Piece")
 		self.assertGreater(piece["used"], 0)
 
 	def test_add_rename_switch_off_delete_unit(self):
@@ -95,9 +101,20 @@ class TestMastersAPI(IntegrationTestCase):
 		listed = {u["name"]: u for u in masters.list_masters("units")["items"]}
 		self.assertEqual(listed["Dozen"]["standard"], 12)
 		self.assertTrue(listed["Piece"]["base_unit"])
-		code = frappe.get_all("Item", filters={"is_stock_item": 1, "has_variants": 0}, pluck="name", limit=1)[
-			0
-		]
+		frappe.set_user("Administrator")
+		code = (
+			frappe.get_doc(
+				{
+					"doctype": "Item",
+					"item_code": "_Test AT Dozen Item",
+					"item_group": "Lips",
+					"stock_uom": "Piece",
+				}
+			)
+			.insert()
+			.name
+		)
+		self.addCleanup(frappe.delete_doc, "Item", code, force=1)
 		# the product has no size of its own for Dozen: ERPNext falls back to the standard size
 		self.assertFalse(frappe.db.exists("UOM Conversion Detail", {"parent": code, "uom": "Dozen"}))
 		self.assertEqual(get_conversion_factor(code, "Dozen")["conversion_factor"], 12)
