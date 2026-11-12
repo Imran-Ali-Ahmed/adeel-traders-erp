@@ -91,10 +91,31 @@ class TestReportsAPI(IntegrationTestCase):
 			reports.run_report("nope")
 
 	def test_not_for_sale_stock_is_kept_out_of_the_totals(self):
+		frappe.set_user("Administrator")
+		frappe.db.savepoint("nfs")
+		self.addCleanup(frappe.db.rollback, save_point="nfs")  # nothing of this test stays
+		frappe.get_doc(
+			{"doctype": "Item", "item_code": "_Test AT Damaged", "item_group": "Lips", "stock_uom": "Piece"}
+		).insert()
+		frappe.get_doc(
+			{
+				"doctype": "Stock Entry",
+				"stock_entry_type": "Material Receipt",
+				"company": "Adeel Traders",
+				"items": [
+					{
+						"item_code": "_Test AT Damaged",
+						"qty": 3,
+						"t_warehouse": "Damaged - AT",
+						"basic_rate": 10,
+					}
+				],
+			}
+		).insert().submit()
 		frappe.set_user(self.owner)
 		out = reports.run_report("stock-balance", from_date="2020-01-01", page_length=500)
 		blocked = [r for r in out["rows"] if r["note"]]
-		self.assertTrue(blocked)  # the demo site has damaged stock
+		self.assertTrue(blocked)  # the damaged stock made above
 		self.assertTrue(
 			all(
 				"Damaged" in r["warehouse"] or "Returns" in r["warehouse"] or "Testers" in r["warehouse"]
