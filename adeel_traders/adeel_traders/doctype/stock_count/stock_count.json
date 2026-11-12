@@ -1,0 +1,200 @@
+{
+ "doctype": "DocType",
+ "name": "Stock Count",
+ "module": "Adeel Traders",
+ "engine": "InnoDB",
+ "is_submittable": 1,
+ "track_changes": 1,
+ "autoname": "naming_series:",
+ "title_field": "warehouse",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "field_order": [
+  "naming_series",
+  "warehouse",
+  "unscanned_as_zero",
+  "company",
+  "column_break_1",
+  "posting_date",
+  "stock_reconciliation",
+  "section_items",
+  "items",
+  "section_totals",
+  "total_counted",
+  "total_difference",
+  "difference_value",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Series",
+   "options": "STC-.YYYY.-",
+   "default": "STC-.YYYY.-",
+   "reqd": 1,
+   "hidden": 1
+  },
+  {
+   "fieldname": "warehouse",
+   "fieldtype": "Link",
+   "label": "Location",
+   "options": "Warehouse",
+   "reqd": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "unscanned_as_zero",
+   "fieldtype": "Check",
+   "label": "Products not scanned count as zero",
+   "default": "0",
+   "description": "For a full count of the location: anything with stock that was not scanned is treated as missing."
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company",
+   "reqd": 1,
+   "remember_last_selected_value": 1
+  },
+  {
+   "fieldname": "column_break_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "posting_date",
+   "fieldtype": "Date",
+   "label": "Count date",
+   "default": "Today",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "stock_reconciliation",
+   "fieldtype": "Link",
+   "label": "Stock Reconciliation",
+   "options": "Stock Reconciliation",
+   "read_only": 1,
+   "no_copy": 1,
+   "description": "Created on submit; it posts the differences to stock and accounts."
+  },
+  {
+   "fieldname": "section_items",
+   "fieldtype": "Section Break",
+   "label": "Counted items"
+  },
+  {
+   "fieldname": "items",
+   "fieldtype": "Table",
+   "label": "Items",
+   "options": "Stock Count Item"
+  },
+  {
+   "fieldname": "section_totals",
+   "fieldtype": "Section Break",
+   "label": "Totals"
+  },
+  {
+   "fieldname": "total_counted",
+   "fieldtype": "Float",
+   "label": "Total counted",
+   "read_only": 1
+  },
+  {
+   "fieldname": "total_difference",
+   "fieldtype": "Float",
+   "label": "Total difference (qty)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "difference_value",
+   "fieldtype": "Currency",
+   "label": "Difference value",
+   "read_only": 1
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "options": "Stock Count",
+   "read_only": 1,
+   "no_copy": 1,
+   "print_hide": 1
+  }
+ ],
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "submit": 1,
+   "cancel": 1,
+   "delete": 1,
+   "amend": 1,
+   "print": 1,
+   "report": 1,
+   "export": 1,
+   "share": 0,
+   "email": 1
+  },
+  {
+   "role": "Stock Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "submit": 1,
+   "cancel": 1,
+   "delete": 1,
+   "amend": 1,
+   "print": 1,
+   "report": 1,
+   "export": 1,
+   "share": 0,
+   "email": 1
+  },
+  {
+   "role": "Stock User",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "submit": 0,
+   "cancel": 0,
+   "delete": 0,
+   "amend": 0,
+   "print": 1,
+   "report": 1,
+   "export": 0,
+   "share": 0,
+   "email": 0
+  },
+  {
+   "role": "Stock Counter",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "submit": 0,
+   "cancel": 0,
+   "delete": 0,
+   "amend": 0,
+   "print": 1,
+   "report": 1,
+   "export": 0,
+   "share": 0,
+   "email": 0
+  }
+ ],
+ "creation": "2026-11-11 17:00:00.000000",
+ "modified": "2026-11-11 17:00:00.000000",
+ "modified_by": "Administrator",
+ "owner": "Administrator",
+ "docstatus": 0,
+ "idx": 0,
+ "index_web_pages_for_search": 0,
+ "row_format": "Dynamic",
+ "states": [],
+ "links": [],
+ "actions": []
+}

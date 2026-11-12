@@ -8,7 +8,7 @@ app_license = "gpl-3.0"
 # Apps
 # ------------------
 
-# required_apps = []
+required_apps = ["erpnext"]
 
 # Each item in the list will be shown as an app in the apps page
 # add_to_apps_screen = [
@@ -52,7 +52,7 @@ app_license = "gpl-3.0"
 # page_js = {"page" : "public/js/file.js"}
 
 # include js in doctype views
-# doctype_js = {"doctype" : "public/js/doctype.js"}
+doctype_js = {"Item": "public/js/item.js"}
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_kanban_js = {"doctype" : "public/js/doctype_kanban.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
@@ -87,16 +87,44 @@ app_license = "gpl-3.0"
 # ----------
 
 # add methods and filters to jinja environment
-# jinja = {
-# 	"methods": "adeel_traders.utils.jinja_methods",
-# 	"filters": "adeel_traders.utils.jinja_filters"
-# }
+# P1.8: our print layouts ask for the company facts and our capabilities (blind count, cost)
+jinja = {
+	"methods": [
+		"adeel_traders.api.v1.printing.company_info",
+		"adeel_traders.permissions.can",
+	],
+}
 
 # Installation
 # ------------
 
 # before_install = "adeel_traders.install.before_install"
-# after_install = "adeel_traders.install.after_install"
+after_install = "adeel_traders.setup.install.after_install"
+
+# Runs after the setup wizard, once the company exists (same hook HRMS uses).
+setup_wizard_complete = "adeel_traders.setup.install.after_setup_wizard"
+
+# Records we own and ship with the app. Synced on install and on every `bench migrate`.
+fixtures = [
+	{
+		"dt": "Role",
+		"filters": [
+			[
+				"name",
+				"in",
+				[
+					"Online Order Team",
+					"Stock Counter",
+					"Can View Cost",
+					"Can Export Lists",
+					"Can See Change History",
+					"Can Decide Approvals",
+				],
+			]
+		],
+	},
+	{"dt": "Role Profile", "filters": [["name", "like", "AT %"]]},
+]
 
 # Uninstallation
 # ------------
@@ -159,13 +187,30 @@ app_license = "gpl-3.0"
 # ---------------
 # Hook on document methods and events
 
-# doc_events = {
-# 	"*": {
-# 		"on_update": "method",
-# 		"on_cancel": "method",
-# 		"on_trash": "method"
-# 	}
-# }
+doc_events = {
+	# P1.6: the people who may approve hear about it in the bell (and by email once sending is on)
+	"Workflow Action": {"after_insert": "adeel_traders.api.v1.approvals.notify_approvers"},
+	# P1.8: the printed header always matches the business details
+	"Company": {"on_update": "adeel_traders.api.v1.printing.refresh_letterhead"},
+	"Address": {"on_update": "adeel_traders.api.v1.printing.address_changed"},
+	"Stock Entry": {
+		"validate": [
+			"adeel_traders.stock.stock_entry.validate_adjustment_reason",
+			"adeel_traders.permissions.validate_stock_entry_branch",
+		],
+	},
+}
+
+# Staff (everyone except admins and the accountant) work in the staff app, not in Desk.
+update_website_context = ["adeel_traders.permissions.keep_staff_out_of_desk"]
+
+permission_query_conditions = {
+	"Stock Count": "adeel_traders.permissions.stock_count_conditions",
+}
+
+has_permission = {
+	"Stock Count": "adeel_traders.permissions.stock_count_has_permission",
+}
 
 # Scheduled Tasks
 # ---------------
@@ -278,4 +323,3 @@ app_license = "gpl-3.0"
 # ------------
 # List of apps whose translatable strings should be excluded from this app's translations.
 # ignore_translatable_strings_from = []
-

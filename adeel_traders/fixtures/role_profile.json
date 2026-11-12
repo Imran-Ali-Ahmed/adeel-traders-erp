@@ -1,0 +1,179 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "Role Profile",
+  "modified": "2026-11-11 13:00:00.000000",
+  "name": "AT Owner",
+  "role_profile": "AT Owner",
+  "roles": [
+   {
+    "role": "System Manager"
+   },
+   {
+    "role": "Accounts Manager"
+   },
+   {
+    "role": "Stock Manager"
+   },
+   {
+    "role": "Sales Manager"
+   },
+   {
+    "role": "Purchase Manager"
+   },
+   {
+    "role": "Item Manager"
+   },
+   {
+    "role": "HR Manager"
+   },
+   {
+    "role": "Sales Master Manager"
+   },
+   {
+    "role": "Purchase Master Manager"
+   },
+   {
+    "role": "Can View Cost"
+   },
+   {
+    "role": "Can Export Lists"
+   },
+   {
+    "role": "Can See Change History"
+   },
+   {
+    "role": "Can Decide Approvals"
+   }
+  ]
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Role Profile",
+  "modified": "2026-11-11 13:00:00.000000",
+  "name": "AT Manager",
+  "role_profile": "AT Manager",
+  "roles": [
+   {
+    "role": "Sales Manager"
+   },
+   {
+    "role": "Purchase Manager"
+   },
+   {
+    "role": "Stock Manager"
+   },
+   {
+    "role": "Item Manager"
+   },
+   {
+    "role": "Sales Master Manager"
+   },
+   {
+    "role": "Purchase Master Manager"
+   },
+   {
+    "role": "Can View Cost"
+   },
+   {
+    "role": "Can Export Lists"
+   },
+   {
+    "role": "Can See Change History"
+   },
+   {
+    "role": "Can Decide Approvals"
+   }
+  ]
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Role Profile",
+  "modified": "2026-11-11 12:00:00.000000",
+  "name": "AT Counter Staff",
+  "role_profile": "AT Counter Staff",
+  "roles": [
+   {
+    "role": "Sales User"
+   }
+  ]
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Role Profile",
+  "modified": "2026-11-11 13:00:00.000000",
+  "name": "AT Store",
+  "role_profile": "AT Store",
+  "roles": [
+   {
+    "role": "Stock User"
+   },
+   {
+    "role": "Purchase User"
+   },
+   {
+    "role": "Stock Counter"
+   },
+   {
+    "role": "Can Export Lists"
+   }
+  ]
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Role Profile",
+  "modified": "2026-11-11 13:00:00.000000",
+  "name": "AT Accountant",
+  "role_profile": "AT Accountant",
+  "roles": [
+   {
+    "role": "Accounts Manager"
+   },
+   {
+    "role": "Accounts User"
+   },
+   {
+    "role": "Can View Cost"
+   },
+   {
+    "role": "Can Export Lists"
+   },
+   {
+    "role": "Can See Change History"
+   }
+  ]
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Role Profile",
+  "modified": "2026-11-11 13:00:00.000000",
+  "name": "AT HR",
+  "role_profile": "AT HR",
+  "roles": [
+   {
+    "role": "HR Manager"
+   },
+   {
+    "role": "HR User"
+   },
+   {
+    "role": "Can Export Lists"
+   }
+  ]
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Role Profile",
+  "modified": "2026-11-11 12:00:00.000000",
+  "name": "AT Online Order Team",
+  "role_profile": "AT Online Order Team",
+  "roles": [
+   {
+    "role": "Online Order Team"
+   },
+   {
+    "role": "Sales User"
+   }
+  ]
+ }
+]

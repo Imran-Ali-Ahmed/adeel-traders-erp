@@ -1,0 +1,102 @@
+{
+ "doctype": "DocType",
+ "name": "Stock Count Item",
+ "module": "Adeel Traders",
+ "engine": "InnoDB",
+ "istable": 1,
+ "editable_grid": 1,
+ "field_order": [
+  "item_code",
+  "item_name",
+  "barcode",
+  "batch_no",
+  "counted_qty",
+  "system_qty",
+  "difference",
+  "valuation_rate",
+  "difference_value",
+  "not_scanned"
+ ],
+ "fields": [
+  {
+   "fieldname": "item_code",
+   "fieldtype": "Link",
+   "label": "Product",
+   "options": "Item",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "item_name",
+   "fieldtype": "Data",
+   "label": "Name",
+   "fetch_from": "item_code.item_name",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "barcode",
+   "fieldtype": "Data",
+   "label": "Barcode",
+   "read_only": 1
+  },
+  {
+   "fieldname": "batch_no",
+   "fieldtype": "Link",
+   "label": "Batch",
+   "options": "Batch",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "counted_qty",
+   "fieldtype": "Float",
+   "label": "Counted",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "system_qty",
+   "fieldtype": "Float",
+   "label": "System",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "difference",
+   "fieldtype": "Float",
+   "label": "Difference",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "valuation_rate",
+   "fieldtype": "Currency",
+   "label": "Cost per unit",
+   "read_only": 1
+  },
+  {
+   "fieldname": "difference_value",
+   "fieldtype": "Currency",
+   "label": "Difference value",
+   "read_only": 1
+  },
+  {
+   "fieldname": "not_scanned",
+   "fieldtype": "Check",
+   "label": "Not scanned (counted as zero)",
+   "read_only": 1,
+   "default": "0"
+  }
+ ],
+ "permissions": [],
+ "creation": "2026-11-11 17:00:00.000000",
+ "modified": "2026-11-11 17:00:00.000000",
+ "modified_by": "Administrator",
+ "owner": "Administrator",
+ "docstatus": 0,
+ "idx": 0,
+ "index_web_pages_for_search": 0,
+ "row_format": "Dynamic",
+ "states": [],
+ "links": [],
+ "actions": []
+}

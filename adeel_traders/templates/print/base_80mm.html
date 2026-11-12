@@ -1,0 +1,35 @@
+{#- Base 80 mm receipt layout (P1.8): narrow, one column, a short business header. The print
+    format sets the paper size "Receipt 80 mm" and is printed without the A4 letterhead.
+    {% from "adeel_traders/templates/print/base_80mm.html" import styles, header, line %} -#}
+
+{% macro styles() -%}
+<style>
+	.at-r { font-family: "Inter", "Segoe UI", Arial, sans-serif; font-size: 11px; color: #000; width: 100%; }
+	.at-r .c { text-align: center; }
+	.at-r .name { font-size: 15px; font-weight: 700; }
+	.at-r .small { font-size: 10px; }
+	.at-r .title { font-size: 13px; font-weight: 700; margin: 6px 0 2px; }
+	.at-r hr { border: 0; border-top: 1px dashed #000; margin: 6px 0; }
+	.at-r table { width: 100%; border-collapse: collapse; }
+	.at-r td { padding: 2px 0; vertical-align: top; }
+	.at-r .num { text-align: right; white-space: nowrap; }
+	.at-r .logo { max-height: 40px; max-width: 160px; }
+	.at-r .sign { margin-top: 26px; border-top: 1px solid #000; padding-top: 2px; font-size: 10px; }
+</style>
+{%- endmacro %}
+
+{% macro header() -%}
+{%- set c = company_info() %}
+<div class="c">
+	{%- if c.logo %}<img class="logo" src="{{ c.logo }}" alt=""><br>{% endif %}
+	<div class="name">{{ c.name }}</div>
+	{%- if c.address %}<div class="small">{{ c.address }}</div>{% endif %}
+	{%- if c.phone %}<div class="small">{{ c.phone }}</div>{% endif %}
+	{%- if c.tax_id %}<div class="small">NTN {{ c.tax_id }}</div>{% endif %}
+</div>
+<hr>
+{%- endmacro %}
+
+{% macro line(label, value) -%}
+<table><tr><td>{{ label }}</td><td class="num">{{ value }}</td></tr></table>
+{%- endmacro %}
